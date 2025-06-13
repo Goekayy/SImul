@@ -2,6 +2,7 @@ package com.example.airportdesmo;
 
 import desmoj.core.simulator.*;
 import desmoj.core.dist.*;
+import desmoj.core.statistic.*;
 
 public class AirportModel extends Model {
 
@@ -18,6 +19,15 @@ public class AirportModel extends Model {
     public ContDistExponential distT1;
     public ContDistExponential distT2;
     public ContDistExponential distRS;
+
+    /* Statistics */
+    public Accumulate qLenT1, qLenT2, qLenRS;
+    public long maxQT1 = 0, maxQT2 = 0, maxQRS = 0;
+    public Tally waitT1, waitT2, waitRS;
+    public Tally systemT1, systemT2, systemRS;
+    public Tally busOccupancy;
+    public Tally roundDurations;
+    public Tally dwellRS, dwellT1, dwellT2;
 
     public AirportModel(double simHours, double lT1, double lT2, double lRS, Experiment exp) {
         super(null, "Airport Rental Model", true, true);
@@ -38,6 +48,24 @@ public class AirportModel extends Model {
         qT2 = new Queue<>(this, "Queue T2", true, true);
         qRS = new Queue<>(this, "Queue RS", true, true);
 
+        qLenT1 = new Accumulate(this, "Len T1", 0.0, true, true);
+        qLenT2 = new Accumulate(this, "Len T2", 0.0, true, true);
+        qLenRS = new Accumulate(this, "Len RS", 0.0, true, true);
+
+        waitT1 = new Tally(this, "Wait T1", true, true);
+        waitT2 = new Tally(this, "Wait T2", true, true);
+        waitRS = new Tally(this, "Wait RS", true, true);
+
+        systemT1 = new Tally(this, "Sys T1", true, true);
+        systemT2 = new Tally(this, "Sys T2", true, true);
+        systemRS = new Tally(this, "Sys RS", true, true);
+
+        busOccupancy = new Tally(this, "Bus Occ", true, true);
+        roundDurations = new Tally(this, "Round Dur", true, true);
+        dwellRS = new Tally(this, "Dwell RS", true, true);
+        dwellT1 = new Tally(this, "Dwell T1", true, true);
+        dwellT2 = new Tally(this, "Dwell T2", true, true);
+
         /* λ is passengers/hour, DESMO-J works with hours as default time unit */
         distT1 = new ContDistExponential(this, "IA T1", 1.0 / LAMBDA_T1, true, true);
         distT2 = new ContDistExponential(this, "IA T2", 1.0 / LAMBDA_T2, true, true);
@@ -47,6 +75,10 @@ public class AirportModel extends Model {
         distT1.setSeed(42);
         distT2.setSeed(43);
         distRS.setSeed(44);
+
+        qLenT1.update(0);
+        qLenT2.update(0);
+        qLenRS.update(0);
     }
 
     @Override

@@ -22,6 +22,7 @@ public class Passenger extends Entity {
     }
 
     public Station getDestination() { return destination; }
+    public Station getOrigin() { return origin; }
 
     public void boarded(double time) { boardTime = time; }
 
