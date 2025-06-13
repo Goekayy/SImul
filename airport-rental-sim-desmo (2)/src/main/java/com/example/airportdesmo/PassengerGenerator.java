@@ -32,6 +32,20 @@ public class PassengerGenerator extends SimProcess {
 
             Passenger p = new Passenger(model, "Pax", false, origin, dest, presentTime().getTimeAsDouble());
             myQueue.insert(p);
+            switch (origin) {
+                case T1 -> {
+                    model.qLenT1.update(model.qT1.size());
+                    if (model.qT1.size() > model.maxQT1) model.maxQT1 = model.qT1.size();
+                }
+                case T2 -> {
+                    model.qLenT2.update(model.qT2.size());
+                    if (model.qT2.size() > model.maxQT2) model.maxQT2 = model.qT2.size();
+                }
+                case RS -> {
+                    model.qLenRS.update(model.qRS.size());
+                    if (model.qRS.size() > model.maxQRS) model.maxQRS = model.qRS.size();
+                }
+            }
 
             /* Wait for next arrival */
             hold(new TimeSpan(interArrival.sample()));
