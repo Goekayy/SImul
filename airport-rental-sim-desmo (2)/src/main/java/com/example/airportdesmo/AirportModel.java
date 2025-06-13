@@ -10,9 +10,9 @@ public class AirportModel extends Model {
     public final double LAMBDA_T1, LAMBDA_T2, LAMBDA_RS;
 
     /* Resources & queues */
-    public ProcessQueue<Passenger> qT1;
-    public ProcessQueue<Passenger> qT2;
-    public ProcessQueue<Passenger> qRS;
+    public Queue<Passenger> qT1;
+    public Queue<Passenger> qT2;
+    public Queue<Passenger> qRS;
 
     /* Distributions */
     public ContDistExponential distT1;
@@ -34,9 +34,9 @@ public class AirportModel extends Model {
     @Override
     public void init() {
         /* Queues */
-        qT1 = new ProcessQueue<>(this, "Queue T1", true, true);
-        qT2 = new ProcessQueue<>(this, "Queue T2", true, true);
-        qRS = new ProcessQueue<>(this, "Queue RS", true, true);
+        qT1 = new Queue<>(this, "Queue T1", true, true);
+        qT2 = new Queue<>(this, "Queue T2", true, true);
+        qRS = new Queue<>(this, "Queue RS", true, true);
 
         /* λ is passengers/hour, DESMO-J works with hours as default time unit */
         distT1 = new ContDistExponential(this, "IA T1", 1.0 / LAMBDA_T1, true, true);

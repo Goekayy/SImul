@@ -16,7 +16,7 @@ public class BusProcess extends SimProcess {
     }
 
     @Override
-    public void lifeCycle() {
+    public void lifeCycle() throws co.paralleluniverse.fibers.SuspendExecution {
         AirportModel model = (AirportModel) getModel();
 
         while (presentTime().getTimeAsDouble() < model.SIM_HOURS) {
@@ -31,7 +31,7 @@ public class BusProcess extends SimProcess {
             });
 
             /* 2. Board */
-            ProcessQueue<Passenger> queue = switch (currentStation) {
+            Queue<Passenger> queue = switch (currentStation) {
                 case T1 -> model.qT1;
                 case T2 -> model.qT2;
                 case RS -> model.qRS;
